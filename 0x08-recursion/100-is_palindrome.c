@@ -1,57 +1,67 @@
 #include "main.h"
 
-int check_palindrome(char *s);
-
 /**
- * is_palindrome - Returns if a string is palindrome
- * @s: the string value to be checked
+ * is_palindrome - finds if a string is a palindrome
+ * @s: input pointer to string to be checked
  *
- * Return: integer value
+ * Return: 1 if is a palindrome, 0 otherwise
  */
+
 int is_palindrome(char *s)
 {
-	if (*s == '0')
+	char d[509] = {0};
+	int p;
+
+	if (*s == '\0')
 		return (1);
 
-	return (check_palindrome(s));
+	p = _get_rev(s, d);
+	d[p] = '\0';
+
+	return (compare(s, d));
+}
+
+
+/**
+ * _get_rev - recursive function that saves a string in reverse
+ * @s: pointer to string to be reversed
+ * @d: destination pointer to store the reversed string
+ *
+ * Return: position to save every next character in d
+ */
+
+int _get_rev(char *s, char *d)
+{
+	int p = 0;
+
+	if (*(s + 1) != '\0')
+		p = _get_rev(s + 1, d);
+
+	d[p] = *s;
+
+	return (p + 1);
 }
 
 /**
- * check_palindrome - Check if a string is palindrome
- * @s: the string value to be checked
+ * compare - compares 2 strings recursively
+ * @s1: string 1 to be compared
+ * @s2: string 2 to be compared
  *
- * Return: integer value
+ * Return: 1 if equal, 0 if different
  */
-int check_palindrome(char *s)
+
+int compare(char *s1, char *s2)
 {
-	int l = _strlen_recursion(s) - 1;
-
-	if (*s == s[l])
+	if (*(s1 + 1) != '\0')
 	{
-		s++;
-		l--;
-	}
-	else
-	{
-		return (0);
+		if (*s1 == *s2 && compare(s1 + 1, s2 + 1))
+			return (1);
+		else
+			return (0);
 	}
 
-	return (1);
-}
+	if (*s1 == *s2)
+		return (1);
 
-/**
- * _strlen_recursion - Get the length of a string
- * @s: the string to get the length
- *
- * Return: the string length
- */
-int _strlen_recursion(char *s)
-{
-	if (*s == '\0')
-	{
-		return (0);
-	}
-
-	s++;
-	return (_strlen_recursion(s) + 1);
+	return (0);
 }
